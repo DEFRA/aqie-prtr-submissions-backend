@@ -39,7 +39,7 @@ services:
 
   ################################################################################
 
-  cdp-node-backend-template:
+  aqie-prtr-submissions-backend:
     build:
       context: .
       target: development
