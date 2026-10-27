@@ -126,7 +126,53 @@ export const config = convict({
       default: 'x-cdp-request-id',
       env: 'TRACING_HEADER'
     }
+  },
+  govukNotify: {
+    apiKey: {
+      doc: 'GOV.UK Notify API key',
+      format: String,
+      default: '',
+      sensitive: true,
+      env: 'GOVUK_NOTIFY_API_KEY'
+    },
+    authenticationTemplateId: {
+      doc: 'GOV.UK Notify email template ID for the sign-in passcode (uses ((code)))',
+      format: String,
+      default: '',
+      env: 'GOVUK_NOTIFY_AUTHENTICATION_TEMPLATE_ID'
+    }
+  },
+  otp: {
+    secret: {
+      doc: 'Secret used to hash passcodes before they are stored. Required in production',
+      format: String,
+      default: '',
+      sensitive: true,
+      env: 'OTP_HASH_SECRET'
+    },
+    ttlMinutes: {
+      doc: 'Minutes a passcode stays valid',
+      format: 'nat',
+      default: 10,
+      env: 'OTP_TTL_MINUTES'
+    },
+    maxAttempts: {
+      doc: 'Wrong guesses allowed before the passcode is locked',
+      format: 'nat',
+      default: 5,
+      env: 'OTP_MAX_ATTEMPTS'
+    },
+    resendCooldownSeconds: {
+      doc: 'Minimum seconds between passcode emails to the same address',
+      format: 'nat',
+      default: 60,
+      env: 'OTP_RESEND_COOLDOWN_SECONDS'
+    }
   }
 })
 
 config.validate({ allowed: 'strict' })
+
+if (isProduction && !config.get('otp.secret')) {
+  throw new Error('OTP_HASH_SECRET must be set in production')
+}
