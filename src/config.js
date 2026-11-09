@@ -112,6 +112,57 @@ export const config = convict({
       }
     }
   },
+  uploader: {
+    url: {
+      doc: 'Base URL for the CDP uploader service',
+      format: String,
+      default: 'http://localhost:7337',
+      env: 'CDP_UPLOADER_URL'
+    },
+    callbackBaseUrl: {
+      doc: 'Base URL for uploader callbacks into the backend',
+      format: String,
+      default: 'http://localhost:3001',
+      env: 'UPLOADER_CALLBACK_BASE_URL'
+    },
+    redirectPath: {
+      doc: 'Relative redirect path used after successful upload',
+      format: String,
+      default: '/nrdu/upload-received',
+      env: 'UPLOADER_REDIRECT_PATH'
+    },
+    callbackToken: {
+      doc: 'Shared secret used to protect the backend callback endpoint',
+      format: String,
+      default: 'dev-callback-token',
+      sensitive: true,
+      env: 'UPLOADER_CALLBACK_TOKEN'
+    },
+    s3Bucket: {
+      doc: 'Destination S3 bucket for clean files',
+      format: String,
+      default: 'aqie-prtr-submissions',
+      env: 'UPLOADER_S3_BUCKET'
+    },
+    s3Path: {
+      doc: 'Optional S3 prefix used for uploaded files',
+      format: String,
+      default: 'nrdu',
+      env: 'UPLOADER_S3_PATH'
+    },
+    maxFileSize: {
+      doc: 'Maximum file size for uploads, in bytes',
+      format: Number,
+      default: 100 * 1000 * 1000,
+      env: 'UPLOADER_MAX_FILE_SIZE'
+    },
+    allowedMimeTypes: {
+      doc: 'Accepted file MIME types for NRDU uploads',
+      format: Array,
+      default: ['text/csv', 'application/csv', 'application/vnd.ms-excel'],
+      env: 'UPLOADER_ALLOWED_MIME_TYPES'
+    }
+  },
   httpProxy: {
     doc: 'HTTP Proxy URL',
     format: String,
